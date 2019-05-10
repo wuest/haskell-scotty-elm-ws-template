@@ -1,0 +1,48 @@
+name:                scotty-elm-ws-template
+version:             0.1.0.0
+synopsis:            Bare template implementing a Scotty+Elm+Websocket chat server/client
+-- description:
+homepage:            https://github.com/wuest/haskell-scotty-elm-ws-template
+license:             BSD3
+license-file:        LICENSE
+author:              Tina Wuest
+maintainer:          tina@wuest.me
+copyright:           2019 Tina Wuest
+category:            Web
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+cabal-version:       >=1.10
+
+source-repository head
+  type: git
+  location: https://github.com/wuest/haskell-scotty-elm-ws-template.git
+
+executable scotty-elm-ws-template
+  main-is:          Main.hs
+  ghc-options:      -Wall -fwarn-implicit-prelude -fwarn-monomorphism-restriction -O2 -threaded -static
+  -- -optl-static -optl-pthread -- Omitted by default: produces binaries which do not work cleanly across libc versions
+  other-modules:      Opts
+                    , View
+                    , Const
+                    , Routes
+                    , Websockets
+
+  build-depends:      base                  >= 4.9  && < 4.13
+                    , text                  >= 1.2  && < 1.3
+                    , file-embed            >= 0.0  && < 0.1
+                    , directory             >= 1.3  && < 1.4
+                    , transformers          >= 0.5  && < 0.6
+                    , mtl                   >= 2.2  && < 2.3
+                    , stm                   >= 2.4  && < 2.6
+                    , wai                   >= 3.2  && < 3.3
+                    , wai-extra             >= 3.0  && < 3.1
+                    , wai-middleware-static >= 0.8  && < 0.9
+                    , wai-websockets        >= 3.0  && < 3.1
+                    , websockets            >= 0.10 && < 0.13
+                    , warp                  >= 3.2  && < 3.3
+                    , scotty                >= 0.11 && < 0.12
+                    , blaze-html            >= 0.9  && < 0.10
+                    , blaze-markup          >= 0.8  && < 0.9
+
+  hs-source-dirs:   src
+  default-language: Haskell2010
