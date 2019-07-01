@@ -15,27 +15,27 @@ import qualified Const
 import qualified View
 
 type Router = ScottyT Text (ReaderT FilePath IO) ()
-type Route = ActionT Text (ReaderT FilePath IO) ()
+type Response = ActionT Text (ReaderT FilePath IO) ()
 
-blaze :: Html -> Route
+blaze :: Html -> Response
 blaze = html . renderHtml
 
-mainCSS :: Route
+mainCSS :: Response
 mainCSS = do
     setHeader "Content-Type" "text/css"
     text Const.mainCSS
 
-mainJS :: Route
+mainJS :: Response
 mainJS = do
     setHeader "Content-Type" "application/javascript"
     text Const.mainJS
 
-websocketJS :: Route
+websocketJS :: Response
 websocketJS = do
     setHeader "Content-Type" "application/javascript"
     text Const.websocketJS
 
-index :: Route
+index :: Response
 index = blaze View.index
 
 routes :: Router
