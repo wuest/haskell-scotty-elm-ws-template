@@ -1,5 +1,5 @@
 name:                scotty-elm-ws-template
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Bare template implementing a Scotty+Elm+Websocket chat server/client
 -- description:
 homepage:            https://github.com/wuest/haskell-scotty-elm-ws-template
@@ -48,6 +48,10 @@ executable scotty-elm-ws-template
                     , scotty                >= 0.11 && < 0.12
                     , blaze-html            >= 0.9  && < 0.10
                     , blaze-markup          >= 0.8  && < 0.9
+                    , aeson                 >= 1.4  && < 1.5
+                    , time                  >= 1.8  && < 1.9
+                    , monad-logger          >= 0.3  && < 0.4
+                    , bytestring            >= 0.10 && < 0.11
                     -- Uncomment for database support and Model templating
 --                  , persistent            >= 2.10 && < 2.11
 --                  , persistent-template   >= 2.7  && < 2.8

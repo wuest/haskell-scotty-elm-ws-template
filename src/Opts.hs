@@ -5,11 +5,16 @@ module Opts ( Options
             , optVerbose
             , webPort
             , baseDir
+            , dbUser
+            , dbPass
+            , dbHost
+            , dbPort
+            , dbName
             ) where
  
 import Prelude
 import System.Console.GetOpt
-import System.Environment    (getProgName, getArgs)
+import System.Environment    (getProgName, getArgs, getEnvironment)
 import System.Exit           (exitSuccess)
 import System.IO             (hPutStrLn, stderr)
 
@@ -20,6 +25,12 @@ import qualified Const
 data Options = Options { optVerbose :: Bool
                        , webPort    :: Int
                        , baseDir    :: IO FilePath
+
+                       , dbUser     :: String
+                       , dbPass     :: String
+                       , dbHost     :: String
+                       , dbPort     :: Int
+                       , dbName     :: String
                        }
 
 defaultOptions :: Options
@@ -27,6 +38,12 @@ defaultOptions =
     Options { optVerbose = False
             , webPort    = 3000
             , baseDir    = Dir.getXdgDirectory Dir.XdgData Const.applicationName
+
+            , dbUser     = ""
+            , dbPass     = ""
+            , dbHost     = "localhost"
+            , dbPort     = 5432
+            , dbName     = "haskell"
             }
 
 printVersion :: Options -> IO Options
@@ -72,8 +89,18 @@ options =
         (ReqArg setWebPort "PORT") "Port for the webserver to run on"
     ]
 
+processEnv :: Options -> (String, String) -> Options
+processEnv opt ("DB_USER", user) = opt { dbUser = user }
+processEnv opt ("DB_PASS", pass) = opt { dbPass = pass }
+processEnv opt ("DB_HOST", host) = opt { dbHost = host }
+processEnv opt ("DB_PORT", port) = opt { dbPort = read port :: Int }
+processEnv opt ("DB_NAME", db)   = opt { dbName = db }
+processEnv opt _ = opt
+
 getOpts :: IO Options
 getOpts = do
     args <- getArgs
+    env <- getEnvironment
     let (actions, _nonoptions, _errors) = getOpt RequireOrder options args
-    foldl (>>=) (return defaultOptions) actions
+        envOpts = foldl processEnv defaultOptions env
+    foldl (>>=) (return envOpts) actions
