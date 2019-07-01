@@ -26,6 +26,11 @@ executable scotty-elm-ws-template
                     , Const
                     , Routes
                     , Websockets
+                    -- Uncomment as appropriate for database backend/templating support
+--                  , Data.Model
+--                  , Data.Postgres
+--                  , Data.Sqlite
+--                  , Data.Mysql
 
   build-depends:      base                  >= 4.9  && < 4.13
                     , text                  >= 1.2  && < 1.3
@@ -39,10 +44,20 @@ executable scotty-elm-ws-template
                     , wai-middleware-static >= 0.8  && < 0.9
                     , wai-websockets        >= 3.0  && < 3.1
                     , websockets            >= 0.10 && < 0.13
-                    , warp                  >= 3.2  && < 3.3
+                    , warp                  >= 3.2  && < 3.4
                     , scotty                >= 0.11 && < 0.12
                     , blaze-html            >= 0.9  && < 0.10
                     , blaze-markup          >= 0.8  && < 0.9
+                    -- Uncomment for database support and Model templating
+--                  , persistent            >= 2.10 && < 2.11
+--                  , persistent-template   >= 2.7  && < 2.8
+                    -- Uncomment for Postgres support
+--                  , persistent-postgresql >= 2.10 && < 2.11
+                    -- Uncomment for MySQL support
+--                  , persistent-mysql      >= 2.10 && < 2.11
+                    -- Uncomment for Sqlite support
+--                  , persistent-sqlite     >= 2.10 && < 2.11
+
 
   hs-source-dirs:   src
   default-language: Haskell2010
