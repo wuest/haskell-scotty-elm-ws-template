@@ -27,3 +27,18 @@ The `Makefile` in particular makes a few assumptions:
  * `elm` is in the path
  * `cabal` is expected to be of a sufficiently new version to support Nix-style
    builds (`v2-*` commands)
+
+### License
+
+This code is intended to be used as a template, and as such I consider it to be
+released as Public Domain.  My sincere hope is that others find this useful and
+that it saves them time getting started.
+
+Due to the [the documented issues with releasing software into the Public
+Domain][license0], this code is also released under the BSD license.  My intent
+is to attach the license so that areas where the law surrounding the use of
+Public Domain law is uncertain, the BSD license provides an appropriate
+framework around which a developer can base their assumptions regarding the use
+of this template.
+
+[license0]:https://opensource.org/faq#public-domain
