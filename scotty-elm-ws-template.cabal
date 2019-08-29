@@ -49,7 +49,7 @@ executable scotty-elm-ws-template
                     , blaze-html            >= 0.9  && < 0.10
                     , blaze-markup          >= 0.8  && < 0.9
                     , aeson                 >= 1.4  && < 1.5
-                    , time                  >= 1.8  && < 1.9
+                    , time                  >= 1.8  && < 1.10
                     , monad-logger          >= 0.3  && < 0.4
                     , bytestring            >= 0.10 && < 0.11
                     -- Uncomment for database support and Model templating
