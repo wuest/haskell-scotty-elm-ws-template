@@ -3,6 +3,7 @@ version:             0.1.0.1
 synopsis:            Bare template implementing a Scotty+Elm+Websocket chat server/client
 -- description:
 homepage:            https://github.com/wuest/haskell-scotty-elm-ws-template
+bug-report:          https://github.com/wuest/haskell-scotty-elm-ws-template/issues
 license:             BSD3
 license-file:        LICENSE
 author:              Tina Wuest
