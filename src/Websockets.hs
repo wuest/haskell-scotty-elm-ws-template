@@ -61,10 +61,10 @@ app :: Concurrent.MVar State -> WS.PendingConnection -> IO ()
 app stateRef pendingConn = do
     conn <- WS.acceptRequest pendingConn
     clientId <- connectClient conn stateRef
-    WS.forkPingThread conn 1
-    Exception.finally
-        (startApp conn clientId stateRef)
-        (disconnectClient clientId stateRef)
+    WS.withPingThread conn 10 (return ()) $
+        Exception.finally
+            (startApp conn clientId stateRef)
+            (disconnectClient clientId stateRef)
 
 initState :: IO (Concurrent.MVar State)
 initState = Concurrent.newMVar []

@@ -13,3 +13,7 @@
   out of the box
 * Tested against Stack lts-13 (GHC 8.6), presumed to continue working with older
   builds of GHC
+
+## 0.1.0.2 -- 2019-11-03
+
+* Requires Network.Websockets 0.12+ to address deprecation of forkPingThread
