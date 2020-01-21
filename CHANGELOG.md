@@ -17,3 +17,7 @@
 ## 0.1.0.2 -- 2019-11-03
 
 * Requires Network.Websockets 0.12+ to address deprecation of forkPingThread
+
+## 0.1.0.3 -- 2020-01-20
+
+* Updates elm to 0.19.1

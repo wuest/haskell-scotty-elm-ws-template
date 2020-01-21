@@ -1,4 +1,4 @@
-port module Types exposing (..)
+module Types exposing (..)
 
 import Json.Encode as JE
 
