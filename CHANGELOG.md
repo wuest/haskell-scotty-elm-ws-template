@@ -21,3 +21,7 @@
 ## 0.1.0.3 -- 2020-01-20
 
 * Updates elm to 0.19.1
+
+## 0.1.0.4 -- 2020-04-12
+
+* Bumps time dependency to allow building against 1.10
