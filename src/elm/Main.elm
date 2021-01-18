@@ -58,6 +58,9 @@ update msg model =
             ({ model | chatlog = updateChatlog model.chatlog data }, Cmd.none)
         InputUpdate text ->
             ({ model | input = text }, Cmd.none)
+        SocketReopened oldsocket ->
+            ({ model | socket = Just oldsocket }, Cmd.none)
+        SocketError _ -> (model, Cmd.none)
 
 decodeChatlog : JE.Value -> Result JD.Error ChatMsg
 decodeChatlog = JD.decodeValue <| JD.map ChatMsg (JD.at ["data", "msg"] JD.string)

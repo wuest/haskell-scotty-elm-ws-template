@@ -11,7 +11,9 @@ type alias Socket = { url : String
 type Msg = OpenSocket String
          | SendSocket
          | SocketOpened Socket
+         | SocketReopened Socket
          | SocketNotOpened
+         | SocketError (Maybe Int)
          | SocketReceived JE.Value
          | InputUpdate String
 
