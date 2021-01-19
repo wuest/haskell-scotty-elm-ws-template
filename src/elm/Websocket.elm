@@ -1,18 +1,14 @@
-port module Websocket exposing ( open , openWithProto, openWithProtos
-                               , createWS, send
+port module Websocket exposing ( open, openWith, defaultConfig
+                               , send
                                , subscriptions
                                )
 
 import Json.Encode as JE
 import Json.Decode as JD
 
-import Types exposing (Socket, SocketSpec, Msg(..))
+import Types exposing (Msg(..), SocketData, SocketConfig, Socket)
 
-type alias SocketData = { socket : Socket
-                        , data : JE.Value
-                        }
-
-port createWS : SocketSpec -> Cmd msg
+port createWS : (String, SocketConfig) -> Cmd msg
 port sendWS : SocketData -> Cmd msg
 
 port newFD : (JD.Value -> msg) -> Sub msg
@@ -20,14 +16,20 @@ port recv : (JE.Value -> msg) -> Sub msg
 port error : (JD.Value -> msg) -> Sub msg
 port reopenedFD : (JD.Value -> msg) -> Sub msg
 
+defaultConfig : SocketConfig
+defaultConfig = { protocols = []
+                , autoReconnect = True
+                , reconnectWait = 2.0
+                , reconnectBackoffMultiplier = 1.5
+                , reconnectBackoffMaxWait = Just 8.0
+                , reconnectMaxTries = Nothing
+                }
+
 open : String -> Cmd msg
-open url = createWS (url, [])
+open url = createWS (url, defaultConfig)
 
-openWithProto : String -> String -> Cmd msg
-openWithProto url proto = createWS (url, [proto])
-
-openWithProtos : String -> List String -> Cmd msg
-openWithProtos url protos = createWS (url, protos)
+openWith : String -> SocketConfig -> Cmd msg
+openWith url config = createWS (url, config)
 
 send : Socket -> JE.Value -> Cmd msg
 send s v = sendWS { socket = s, data = v }

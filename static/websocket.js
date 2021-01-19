@@ -40,23 +40,34 @@ export default function(app)
   }
 
   // Reconnect after error/close
-  ElmWS.__reconnect__ = function(fd, url, protos)
+  ElmWS.__reconnect__ = function(fd, url, config, retries)
   {
+    if(!config.autoReconnect || (config.reconnectMaxTries && (retries > config.reconnectMaxTries))) { return(function(){;}); }
+
     return(function()
     {
-      var socket;
-      socket = new WebSocket(url, protos);
+      var timeout = Math.pow(config.reconnectWait, retries * config.reconnectBackoffMultiplier);
+      if(config.reconnectBackoffMaxWait && config.reconnectBackoffMaxWait < timeout)
+      {
+        timeout = config.reconnectBackoffMaxWait;
+      }
 
-      ElmWS.fd[fd] = socket;
+      setTimeout(function()
+      {
+        var socket = new WebSocket(url, config.protocols);
+        ElmWS.fd[fd] = socket;
 
-      socket.onopen = ElmWS.__open__(socket, url, fd);
-      socket.onmessage = ElmWS.__recv__(fd);
-      socket.onerror = ElmWS.__error__(socket, fd);
-      socket.onclose = ElmWS.__reconnect__(fd, url, protos);
+        socket.onclose = ElmWS.__reconnect__(fd, url, config, retries+1);
+        socket.onmessage = ElmWS.__recv__(fd);
+        socket.onerror = ElmWS.__error__(socket, fd);
 
-      app.ports.reopenedFD.send({ url : url
-                                , fd : fd
-                                });
+        socket.onopen = function()
+        {
+          app.ports.reopenedFD.send({ url : url
+                                    , fd : fd
+                                    });
+        }
+      }, timeout * 1000);
     });
   }
 
@@ -64,21 +75,21 @@ export default function(app)
   // User-invoked functions
   //
 
-  // createWS : (String, List String) -> Cmd msg
+  // createWS : (String, SocketConfig) -> Cmd msg
   ElmWS.create = function(spec)
   {
-    var url, protos, socket, fd, websocket_uri;
+    var url, config, socket, fd, websocket_uri;
 
-    [url, protos] = spec;
+    [url, config] = spec;
     websocket_uri = window.location.protocol.replace(/^http/, 'ws') + '//' + url;
 
-    socket = new WebSocket(websocket_uri, protos);
+    socket = new WebSocket(websocket_uri, config.protocols);
     fd     = ElmWS.fd.push(socket) - 1;
 
     socket.onopen    = ElmWS.__open__(socket, websocket_uri, fd);
+    socket.onclose   = ElmWS.__reconnect__(fd, websocket_uri, config, 0);
     socket.onmessage = ElmWS.__recv__(fd);
     socket.onerror   = ElmWS.__error__(socket, fd);
-    socket.onclose   = ElmWS.__reconnect__(fd, websocket_uri, protos);
   }
 
   // send : {socket : { fd : Int }, data : { msg : String }} -> Cmd msg

@@ -17,5 +17,17 @@ type Msg = OpenSocket String
          | SocketReceived JE.Value
          | InputUpdate String
 
+type alias SocketData = { socket : Socket
+                        , data : JE.Value
+                        }
+
+type alias SocketConfig = { protocols : List String
+                          , autoReconnect : Bool
+                          , reconnectWait : Float
+                          , reconnectBackoffMultiplier : Float
+                          , reconnectBackoffMaxWait : Maybe Float
+                          , reconnectMaxTries : Maybe Int
+                          }
+
 type alias ChatData = { msg : String
                       }
