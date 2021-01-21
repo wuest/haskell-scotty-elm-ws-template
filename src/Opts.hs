@@ -24,7 +24,7 @@ import qualified Const
 
 data Options = Options { optVerbose :: Bool
                        , webPort    :: Int
-                       , baseDir    :: IO FilePath
+                       , baseDir    :: FilePath
 
                        , dbUser     :: String
                        , dbPass     :: String
@@ -33,18 +33,19 @@ data Options = Options { optVerbose :: Bool
                        , dbName     :: String
                        }
 
-defaultOptions :: Options
+defaultOptions :: IO Options
 defaultOptions =
-    Options { optVerbose = False
-            , webPort    = 3000
-            , baseDir    = Dir.getXdgDirectory Dir.XdgData Const.applicationName
+    Dir.getXdgDirectory Dir.XdgData Const.applicationName >>= \base ->
+        return $ Options { optVerbose = False
+                         , webPort    = 3000
+                         , baseDir    = base
 
-            , dbUser     = ""
-            , dbPass     = ""
-            , dbHost     = "localhost"
-            , dbPort     = 5432
-            , dbName     = "haskell"
-            }
+                         , dbUser     = ""
+                         , dbPass     = ""
+                         , dbHost     = "localhost"
+                         , dbPort     = 5432
+                         , dbName     = "haskell"
+                         }
 
 printVersion :: Options -> IO Options
 printVersion _ = do
@@ -58,7 +59,7 @@ printHelp _ = do
     exitSuccess
 
 baseDirLocation :: FilePath -> Options -> IO Options
-baseDirLocation arg opt = return opt { baseDir = Dir.makeAbsolute arg }
+baseDirLocation arg opt = Dir.makeAbsolute arg >>= \base -> return $ opt { baseDir = base }
 
 verbose :: Options -> IO Options
 verbose opt = return opt { optVerbose = True }
@@ -102,5 +103,5 @@ getOpts = do
     args <- getArgs
     env <- getEnvironment
     let (actions, _nonoptions, _errors) = getOpt RequireOrder options args
-        envOpts = foldl processEnv defaultOptions env
-    foldl (>>=) (return envOpts) actions
+        envOpts = defaultOptions >>= \opts -> return $ foldl processEnv opts env
+    foldl (>>=) envOpts actions

@@ -41,7 +41,7 @@ main :: IO ()
 main = do
     opts <- Opts.getOpts
     let port = Opts.webPort opts
-    base <- Opts.baseDir opts
+        base = Opts.baseDir opts
     _ <- setupDataDir base
     putStrLn $ "Starting service on port " ++ show port
     start port base
