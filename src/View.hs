@@ -23,6 +23,6 @@ index = html $ do
     headerNormal
     H.body $ H.div ! A.id "app" $ ""
     H.script ! A.type_ "module" $ toHtml $ unlines [ "import elmws from '/websocket.js'"
-                                , "var app = Elm.Main.init({node : document.getElementById('app'), flags : window.location.host});"
-                                , "elmws(app);"
-                                ]
+                                                   , "var app = Elm.Main.init({node : document.getElementById('app'), flags : window.location.host});"
+                                                   , "elmws(app);"
+                                                   ]
