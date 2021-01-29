@@ -6,7 +6,6 @@ module Data.Database where
 import Prelude
 
 import Data.Model
-import qualified Opts as O
 
 import Control.Monad.IO.Class     ( liftIO )
 import Control.Monad.Trans.Reader ( ReaderT )
@@ -27,30 +26,36 @@ newtype DBPool = DBPool { getPool :: ConnectionPool }
 type DBPoolM   = ReaderT DBPool IO
 type Query m   = ReaderT SqlBackend IO m
 
-connectSqlite :: O.Options -> IO DBPool
-connectSqlite opts = do
-    let n = T.pack $ O.dbName opts
+type DBName = String
+type DBUser = String
+type DBHost = String
+type DBPassword = String
+type DBPort = Int
+
+connectSqlite :: DBName -> IO DBPool
+connectSqlite name = do
+    let n = T.pack $ name
     pool <- runStdoutLoggingT $ createSqlitePool n 10
     return $ DBPool pool
 
-connectMySQL :: O.Options -> IO DBPool
-connectMySQL opts = do
-    let info = defaultConnectInfo { connectDatabase = O.dbName opts
-                                  , connectUser     = O.dbUser opts
-                                  , connectPassword = O.dbPass opts
-                                  , connectHost     = O.dbHost opts
-                                  , connectPort     = fromIntegral $ O.dbPort opts
+connectMySQL :: DBName -> DBUser -> DBHost -> DBPassword -> DBPort -> IO DBPool
+connectMySQL name user pass host port = do
+    let info = defaultConnectInfo { connectDatabase = name
+                                  , connectUser     = user
+                                  , connectPassword = pass
+                                  , connectHost     = host
+                                  , connectPort     = fromIntegral port
                                   }
     pool <- runStdoutLoggingT $ createMySQLPool info 10
     return $ DBPool pool
 
-connectPostgres :: O.Options -> IO DBPool
-connectPostgres opts = do
-    let h = O.dbHost opts
-        o = show $ O.dbPort opts
-        u = O.dbUser opts
-        p = O.dbPass opts
-        n = O.dbName opts
+connectPostgres :: DBName -> DBUser -> DBHost -> DBPassword -> DBPort -> IO DBPool
+connectPostgres name user host pass port = do
+    let h = host
+        o = show port
+        u = user
+        p = pass
+        n = name
         conn = C8.pack $ "host=" ++ h ++ " dbname=" ++ n ++ " port=" ++ o ++ " user=" ++ u ++ " password=" ++ p
     pool <- runStdoutLoggingT $ createPostgresqlPool conn 10
     return $ DBPool pool
