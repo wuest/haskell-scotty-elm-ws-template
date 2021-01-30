@@ -15,8 +15,8 @@ started on a new application:
  * Edit the `.cabal` file to reflect the application's information
  * `make`
 
-The Makefile is generic, so updates to the cabal file are sufficient to be
-reflected automatically in the make targets.
+The Makefile is generic, so updates to the cabal file and `src/Const.hs` are
+sufficient to be reflected automatically in the make targets.
 
 ### Assumptions
 
