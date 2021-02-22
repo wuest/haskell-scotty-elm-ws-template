@@ -56,11 +56,11 @@ executable scotty-elm-ws-template
                     -- If removing specific drivers from the compilation is
                     -- desired, edit Data/Database.hs to remove references to
                     -- any removed drivers
---                  , persistent            >= 2.10 && < 2.11
---                  , persistent-template   >= 2.7  && < 2.8
---                  , persistent-mysql      >= 2.10 && < 2.11
---                  , persistent-sqlite     >= 2.10 && < 2.11
---                  , persistent-postgresql >= 2.10 && < 2.11
+--                  , persistent            >= 2.10 && < 2.12
+--                  , persistent-template   >= 2.7  && < 2.10
+--                  , persistent-mysql      >= 2.10 && < 2.12
+--                  , persistent-sqlite     >= 2.10 && < 2.12
+--                  , persistent-postgresql >= 2.10 && < 2.12
 
 
   hs-source-dirs:   src
