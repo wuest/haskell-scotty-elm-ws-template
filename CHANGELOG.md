@@ -25,3 +25,7 @@
 ## 0.1.0.4 -- 2020-04-12
 
 * Bumps time dependency to allow building against 1.10
+
+## 0.1.1 -- 2021-03-17
+
+* Revises versioning to drop the fourth number

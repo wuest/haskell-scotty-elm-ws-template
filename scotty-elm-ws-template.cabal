@@ -1,5 +1,5 @@
 name:                scotty-elm-ws-template
-version:             0.1.0.3
+version:             0.1.1
 synopsis:            Bare template implementing a Scotty+Elm+Websocket chat server/client
 -- description:
 homepage:            https://github.com/wuest/haskell-scotty-elm-ws-template
