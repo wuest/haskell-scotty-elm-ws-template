@@ -29,3 +29,7 @@
 ## 0.1.1 -- 2021-03-17
 
 * Revises versioning to drop the fourth number
+
+## 0.2.0 -- 2021-10-12
+
+* Minimum aeson version bumped to >= 2.0
