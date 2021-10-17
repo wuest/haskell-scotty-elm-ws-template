@@ -7,7 +7,7 @@ import Html.Events as HE
 import Json.Encode as JE
 import Json.Decode as JD
 
-import Types exposing (Msg(..), Socket, ChatData)
+import Types exposing (Msg(..), ChatData)
 import Websocket as WS
 
 main = Browser.element
@@ -19,7 +19,7 @@ main = Browser.element
 
 {- MODEL -}
 
-type alias Model = { socket : Maybe Socket
+type alias Model = { socket : Maybe WS.Socket
                    , username : String
                    , input : String
                    , chatlog : String
@@ -36,7 +36,7 @@ init url = ( { socket = Nothing
            , WS.open url
            )
 
-send : Maybe Socket -> JE.Value -> Cmd msg
+send : Maybe WS.Socket -> JE.Value -> Cmd msg
 send ms v = case ms of
     Nothing -> Cmd.none
     Just s -> WS.send s v
@@ -50,17 +50,17 @@ update msg model =
         SendSocket ->
             let data = JE.object [("msg", JE.string model.input)] in
             ({ model | input = "" }, send model.socket data)
-        SocketOpened newsocket ->
+        Websocket (WS.SocketOpened newsocket) ->
             ({ model | socket = Just newsocket }, Cmd.none)
-        SocketNotOpened ->
+        Websocket WS.SocketNotOpened ->
             (model, Cmd.none)
-        SocketReceived data ->
+        Websocket (WS.SocketReceived data) ->
             ({ model | chatlog = updateChatlog model.chatlog data }, Cmd.none)
+        Websocket (WS.SocketReopened oldsocket) ->
+            ({ model | socket = Just oldsocket }, Cmd.none)
+        Websocket (WS.SocketError _) -> (model, Cmd.none)
         InputUpdate text ->
             ({ model | input = text }, Cmd.none)
-        SocketReopened oldsocket ->
-            ({ model | socket = Just oldsocket }, Cmd.none)
-        SocketError _ -> (model, Cmd.none)
 
 decodeChatlog : JE.Value -> Result JD.Error ChatMsg
 decodeChatlog = JD.decodeValue <| JD.map ChatMsg (JD.at ["data", "msg"] JD.string)
@@ -73,7 +73,7 @@ updateChatlog log new =
 
 {- SUBSCRIPTIONS -}
 subscriptions : Model -> Sub Msg
-subscriptions _ = WS.subscriptions
+subscriptions _ = Sub.map Websocket WS.subscriptions
 
 {- VIEW -}
 li : String -> Html Msg

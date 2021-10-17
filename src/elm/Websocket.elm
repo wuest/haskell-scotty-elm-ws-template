@@ -1,4 +1,5 @@
-port module Websocket exposing ( open, openWith, defaultConfig
+port module Websocket exposing ( SocketData, SocketConfig, Socket, Msg(..)
+                               , open, openWith, defaultConfig
                                , send
                                , subscriptions
                                )
@@ -6,7 +7,27 @@ port module Websocket exposing ( open, openWith, defaultConfig
 import Json.Encode as JE
 import Json.Decode as JD
 
-import Types exposing (Msg(..), SocketData, SocketConfig, Socket)
+type alias SocketData = { socket : Socket
+                        , data : JE.Value
+                        }
+
+type alias SocketConfig = { protocols : List String
+                          , autoReconnect : Bool
+                          , reconnectWait : Float
+                          , reconnectBackoffMultiplier : Float
+                          , reconnectBackoffMaxWait : Maybe Float
+                          , reconnectMaxTries : Maybe Int
+                          }
+
+type alias Socket = { url : String
+                    , fd : Int
+                    }
+
+type Msg = SocketOpened Socket
+         | SocketReopened Socket
+         | SocketNotOpened
+         | SocketError (Maybe Int)
+         | SocketReceived JE.Value
 
 port createWS : (String, SocketConfig) -> Cmd msg
 port sendWS : SocketData -> Cmd msg
