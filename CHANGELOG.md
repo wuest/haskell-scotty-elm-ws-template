@@ -34,3 +34,7 @@
 
 * Minimum aeson version bumped to >= 2.0
 * Restructured Types.elm to move websocket-specific types to Websocket.elm
+
+## 0.2.1 -- 2021-11-10
+
+* Updated base and time constraints
