@@ -38,3 +38,7 @@
 ## 0.2.1 -- 2021-11-10
 
 * Updated base and time constraints
+
+## 0.2.2 -- 2022-11-01
+
+* Updated aeson, base, and mtl constraints
