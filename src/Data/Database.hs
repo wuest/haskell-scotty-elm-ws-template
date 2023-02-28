@@ -34,7 +34,7 @@ type DBPort = Int
 
 connectSqlite :: DBName -> IO DBPool
 connectSqlite name = do
-    let n = T.pack $ name
+    let n = T.pack name
     pool <- runStdoutLoggingT $ createSqlitePool n 10
     return $ DBPool pool
 
