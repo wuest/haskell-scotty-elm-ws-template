@@ -1,5 +1,5 @@
 name:                scotty-elm-ws-template
-version:             0.2.2
+version:             0.3.0
 synopsis:            Bare template implementing a Scotty+Elm+Websocket chat server/client
 -- description:
 homepage:            https://github.com/wuest/haskell-scotty-elm-ws-template
@@ -8,7 +8,7 @@ license:             BSD3
 license-file:        LICENSE
 author:              Tina Wuest
 maintainer:          tina@wuest.me
-copyright:           2019-2021 Tina Wuest
+copyright:           2019-2024 Tina Wuest
 category:            Web
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
@@ -21,7 +21,6 @@ source-repository head
 executable scotty-elm-ws-template
   main-is:          Main.hs
   ghc-options:      -Wall -fwarn-implicit-prelude -fwarn-monomorphism-restriction -O2 -threaded -static
-  -- -optl-static -optl-pthread -- Omitted by default: produces binaries which do not work cleanly across libc versions
   other-modules:      Opts
                     , View
                     , Const
@@ -31,8 +30,8 @@ executable scotty-elm-ws-template
 --                  , Data.Model
 --                  , Data.Database
 
-  build-depends:      base                  >= 4.9  && < 4.18
-                    , text                  >= 1.2  && < 2.1
+  build-depends:      base                  >= 4.9  && < 4.20
+                    , text                  >= 1.2  && < 2.2
                     , file-embed            >= 0.0  && < 0.1
                     , directory             >= 1.3  && < 1.4
                     , transformers          >= 0.5  && < 0.7
@@ -42,21 +41,21 @@ executable scotty-elm-ws-template
                     , wai-extra             >= 3.0  && < 3.2
                     , wai-middleware-static >= 0.8  && < 0.10
                     , wai-websockets        >= 3.0  && < 3.1
-                    , websockets            >= 0.12 && < 0.13
-                    , warp                  >= 3.2  && < 3.4
-                    , scotty                >= 0.11 && < 0.13
+                    , websockets            >= 0.12 && < 0.14
+                    , warp                  >= 3.2  && < 3.5
+                    , scotty                >= 0.22 && < 0.23
                     , blaze-html            >= 0.9  && < 0.10
                     , blaze-markup          >= 0.8  && < 0.9
-                    , aeson                 >= 2.0  && < 2.2
-                    , time                  >= 1.8  && < 1.14
+                    , aeson                 >= 2.0  && < 2.3
+                    , time                  >= 1.8  && < 1.15
                     , monad-logger          >= 0.3  && < 0.4
-                    , bytestring            >= 0.10 && < 0.12
+                    , bytestring            >= 0.10 && < 0.13
                     -- Uncomment for database support and Model templating
                     --
                     -- If removing specific drivers from the compilation is
                     -- desired, edit Data/Database.hs to remove references to
                     -- any removed drivers
---                  , persistent            >= 2.10 && < 2.14
+--                  , persistent            >= 2.10 && < 2.15
 --                  , persistent-template   >= 2.7  && < 2.13
 --                  , persistent-mysql      >= 2.10 && < 2.14
 --                  , persistent-sqlite     >= 2.10 && < 2.14

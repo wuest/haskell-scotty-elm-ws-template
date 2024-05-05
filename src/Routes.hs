@@ -4,7 +4,6 @@ module Routes ( routes )
 where
 
 import Prelude
-import Data.Text.Lazy ( Text )
 import Control.Monad.Reader ( ReaderT )
 
 import Web.Scotty.Trans
@@ -14,8 +13,8 @@ import Text.Blaze.Html.Renderer.Text
 import qualified Const
 import qualified View
 
-type Router = ScottyT Text (ReaderT FilePath IO) ()
-type Response = ActionT Text (ReaderT FilePath IO) ()
+type Router = ScottyT (ReaderT FilePath IO) ()
+type Response = ActionT (ReaderT FilePath IO) ()
 
 blaze :: Html -> Response
 blaze = html . renderHtml

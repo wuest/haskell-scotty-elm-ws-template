@@ -1,6 +1,6 @@
 export default function(app)
 {
-  var ElmWS = { fd : [] }
+  let ElmWS = { fd : [] }
 
   //
   // Callback generators
@@ -46,7 +46,7 @@ export default function(app)
 
     return(function()
     {
-      var timeout = Math.pow(config.reconnectWait, retries * config.reconnectBackoffMultiplier);
+      let timeout = config.reconnectWait * retries * config.reconnectBackoffMultiplier * 1000;
       if(config.reconnectBackoffMaxWait && config.reconnectBackoffMaxWait < timeout)
       {
         timeout = config.reconnectBackoffMaxWait;
@@ -54,7 +54,7 @@ export default function(app)
 
       setTimeout(function()
       {
-        var socket = new WebSocket(url, config.protocols);
+        let socket = new WebSocket(url, config.protocols);
         ElmWS.fd[fd] = socket;
 
         socket.onclose = ElmWS.__reconnect__(fd, url, config, retries+1);
@@ -78,7 +78,7 @@ export default function(app)
   // createWS : (String, SocketConfig) -> Cmd msg
   ElmWS.create = function(spec)
   {
-    var url, config, socket, fd, websocket_uri;
+    let url, config, socket, fd, websocket_uri;
 
     [url, config] = spec;
     websocket_uri = window.location.protocol.replace(/^http/, 'ws') + '//' + url;
@@ -95,7 +95,7 @@ export default function(app)
   // send : {socket : { fd : Int }, data : { msg : String }} -> Cmd msg
   ElmWS.send = function(spec)
   {
-    var socket = ElmWS.fd[spec.socket.fd];
+    let socket = ElmWS.fd[spec.socket.fd];
     if(socket !== undefined && socket.readyState == 1)
     {
       socket.send(JSON.stringify(spec.data));
